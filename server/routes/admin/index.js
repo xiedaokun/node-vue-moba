@@ -5,7 +5,6 @@ module.exports = app => {
     router.post('/categories', async (req, res) => {
         const model = await Category.create(req.body)
         res.send(model)
-
     })
     router.get('/categories', async (req, res) => {
         const items = await Category.find().limit(10)
