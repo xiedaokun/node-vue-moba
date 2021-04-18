@@ -41,11 +41,11 @@ export default {
       })
     },
     async fetch() {
-      const res = await this.$http.get(`/categories/${this.id}`)
+      const res = await this.$http.get(`categories/${this.id}`)
       this.model = res.data
     },
     async fetchParents() {
-      const res = await this.$http.get(`/categories`)
+      const res = await this.$http.get(`categories`)
       this.parents = res.data
     }
   },
