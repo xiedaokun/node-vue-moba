@@ -5,6 +5,19 @@
       <el-form-item label="名称">
         <el-input v-model="model.name"></el-input>
       </el-form-item>
+      <el-form-item label="称号">
+        <el-input v-model="model.title"></el-input>
+      </el-form-item>
+      <el-form-item label="类型">
+        <el-select v-model="model.categories">
+          <el-option
+              v-for="item in categories"
+              :key="item._id"
+              :label="item.name"
+              :value="item._id">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="头像">
         <el-upload
             class="avatar-uploader"
@@ -28,31 +41,40 @@ export default {
   },
   data() {
     return {
-      model: {}
+      model: {
+        name: '',
+        avatar: ''
+      },
+      categories: []
     }
   },
   methods: {
     afterUpload(res) {
-      this.$set(this.model,'avatar',res.url)
+      this.model.avatar = res.url
     },
     async save() {
       if (this.id) {
-        await this.$http.put(`rest/items/${this.id}`, this.model)
+        await this.$http.put(`rest/heroes/${this.id}`, this.model)
       } else {
-        await this.$http.post('rest/items', this.model)
+        await this.$http.post('rest/heroes', this.model)
       }
-      this.$router.push('/items/list')
+      this.$router.push('/heroes/list')
       this.$message({
         type: 'success',
         message: '保存成功'
       })
     },
     async fetch() {
-      const res = await this.$http.get(`rest/items/${this.id}`)
+      const res = await this.$http.get(`rest/heroes/${this.id}`)
       this.model = res.data
+    },
+    async fetchCategories() {
+      const res = await this.$http.get(`rest/categories`)
+      this.categories = res.data
     }
   },
   created() {
+    this.fetchCategories()
     this.id && this.fetch()
   }
 }
